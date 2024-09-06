@@ -67,7 +67,7 @@ def run(bk):
 #         return 0
 
 
-def insertnotes(fnid, footnote_dict: dict[any, int], bk):
+def insertnotes(footnote_dict: dict[any, int], bk):
     # Making and inserting the notes:
     # Iterate through all xhtml/html-files in the epub and
     # 1) Inserts link(s) to found notes in the text and link to footnote.css
