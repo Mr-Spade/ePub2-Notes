@@ -1,0 +1,66 @@
+name: Publish Release
+
+on:
+  push:
+    tags:
+      - "*"
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Determine if this is a new tag
+        id: get_tag
+        run: |
+          TAG_REF="${{ github.ref }}"
+          if [[ $TAG_REF == refs/tags/* ]]; then
+            echo "is_tag=true" >> $GITHUB_ENV
+            TAG_NAME=${TAG_REF#refs/tags/}
+            echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
+          else
+            echo "is_tag=false" >> $GITHUB_ENV
+            echo "tag_name=beta" >> $GITHUB_ENV
+
+      - name: Create zip file for tag release
+        if: env.is_tag == 'true'
+        run: |
+          mkdir ePub2-Notes
+          cp plugin.png plugin.py plugin.xml ePub2-Notes/
+          zip -r "ePub2-Notes_${{ env.tag_name }}.zip" ePub2-Notes
+
+      - name: Create zip file for beta release
+        if: env.is_tag == 'false'
+        run: |
+          mkdir ePub2-Notes
+          cp plugin.png plugin.py plugin.xml ePub2-Notes/
+          zip -r "ePub2-Notes_beta.zip" ePub2-Notes
+
+      - name: Create or Update Release for tag
+        if: env.is_tag == 'true'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: "ePub2-Notes_${{ env.tag_name }}.zip"
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create or Update Pre-release for beta
+        if: env.is_tag == 'false'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: "ePub2-Notes_beta.zip"
+          draft: false
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Cleanup
+        run: |
+          rm -rf ePub2-Notes
+          rm ePub2-Notes_*.zip
