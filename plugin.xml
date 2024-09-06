@@ -5,7 +5,7 @@
 <author>eLibrarian</author>
 <description>Notes and references for ePub2-books</description>
 <engine>python3.4</engine>
-<version>0.2.2</version>
+<version>0.3.0</version>
 <autostart>true</autostart>
 <autoclose>false</autoclose>
 <oslist>osx,unx,win</oslist>
