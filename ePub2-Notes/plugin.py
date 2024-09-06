@@ -74,13 +74,13 @@ def insertnotes(fnid, bk):
         found = re.search(r"\^\[.*?\]", html)
         if found is not None:
             # only once for each file with notes
-            cssexist = re.search(r"\.\.\/Styles\/footnote\.css", html)
-            if not cssexist:
-                html = re.sub(
-                    r"\<\/head\>",
-                    r'<link href="../Styles/footnote.css" rel="stylesheet" type="text/css"/>\n</head>',
-                    html,
-                )
+            # cssexist = re.search(r"\.\.\/Styles\/footnote\.css", html)
+            # if not cssexist:
+            #     html = re.sub(
+            #         r"\<\/head\>",
+            #         r'<link href="../Styles/footnote.css" rel="stylesheet" type="text/css"/>\n</head>',
+            #         html,
+            #     )
             while found is not None:
                 # once for every found note. If necessary,
                 # replace the words "Note" and "Back" with whatever you see fit
