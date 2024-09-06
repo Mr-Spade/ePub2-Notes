@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+<name>ePub2-Notes</name>
+<type>edit</type>
+<author>eLibrarian</author>
+<description>Notes and references for ePub2-books</description>
+<engine>python3.4</engine>
+<version>0.2.2</version>
+<autostart>true</autostart>
+<autoclose>false</autoclose>
+<oslist>osx,unx,win</oslist>
+</plugin>
