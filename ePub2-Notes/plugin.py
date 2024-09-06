@@ -9,7 +9,7 @@ from tkinter import simpledialog
 
 
 def run(bk):
-    cssfound = 0
+    # cssfound = 0
     lastid = 0
     fnid = 0
     fnid1 = 0
@@ -17,13 +17,13 @@ def run(bk):
     # Uncomment next line for test purposes
     # print (str(cssfound) + ' ' + str(lastid) + ' ' + str(fnid))
     # Test for existing footnote.css - if so, set cssfound variable to 1
-    for id, href in bk.css_iter():
-        filename = os.path.basename(href)
-        # print(id, href+'\n'+ filename+'1')
-        if filename == "footnote.css":
-            cssfound = 1
-        else:
-            print("-----")
+    # for id, href in bk.css_iter():
+    #     filename = os.path.basename(href)
+    #     # print(id, href+'\n'+ filename+'1')
+    #     if filename == "footnote.css":
+    #         cssfound = 1
+    #     else:
+    #         print("-----")
     alist = [0]
     for [id, href] in bk.text_iter():
         html = bk.readfile(id)
@@ -36,13 +36,13 @@ def run(bk):
     # print(max(alist))
     fnid = max(alist)
     if fnid > 0:
-        returnres(fnid, bk, cssfound)
+        returnres(fnid, bk)
     else:
-        insertnotes(0, bk, cssfound)
+        insertnotes(0, bk)
     return 0
 
 
-def returnres(fnid, bk, cssfound):
+def returnres(fnid, bk):
     # Dialog warning user for found notes
     # and allowing to inject new start reference number for new notes
     title = "Existing notes found!"
@@ -56,13 +56,13 @@ def returnres(fnid, bk, cssfound):
     result = simpledialog.askinteger(title, prompt, initialvalue=fnid + 1, minvalue=1)
     if result is not None:
         fnid = result - 1
-        insertnotes(fnid, bk, cssfound)
+        insertnotes(fnid, bk)
     else:
         print("ePub2-notes cancelled by your request")
         return 0
 
 
-def insertnotes(fnid, bk, cssfound):
+def insertnotes(fnid, bk):
     # Making and inserting the notes:
     # Iterate through all xhtml/html-files in the epub and
     # 1) Inserts link(s) to found notes in the text and link to footnote.css
