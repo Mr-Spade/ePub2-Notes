@@ -49,13 +49,11 @@ def returnres(fnid, bk, cssfound):
     prompt = (
         "There seems to be notes in this book already.\nNotes IDs will continue from >> "
         + str(fnid + 1)
-        + " << or any higher entered below.\n\nNew notes will be inserted below existing.\n"
+        + " << or any entered below.\n\nNew notes will be inserted below existing.\n"
     )
     application_window = tk.Tk()
     application_window.withdraw()
-    result = simpledialog.askinteger(
-        title, prompt, initialvalue=fnid + 1, minvalue=fnid + 1
-    )
+    result = simpledialog.askinteger(title, prompt, initialvalue=fnid + 1, minvalue=1)
     if result is not None:
         fnid = result - 1
         insertnotes(fnid, bk, cssfound)
