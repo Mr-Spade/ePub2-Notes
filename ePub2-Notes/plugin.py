@@ -12,6 +12,7 @@ def run(bk):
     # cssfound = 0
     lastid = 0
     fnid = 0
+    footnote_dict = dict()
     fnid1 = 0
     filename = ""
     # Uncomment next line for test purposes
@@ -24,45 +25,49 @@ def run(bk):
     #         cssfound = 1
     #     else:
     #         print("-----")
-    alist = [0]
+    # alist = [0]
     for [id, href] in bk.text_iter():
+        current_list = [0]
         html = bk.readfile(id)
         found1 = re.search(r"fnref(\d+)", html)
         # fnid1 = found1
         if found1 is not None:
             for m in re.finditer(r"fnref(\d+)", html):
-                alist.append(int(m.group(1)))
+                # alist.append(int(m.group(1)))
+                current_list.append(int(m.group(1)))
+        footnote_dict[id] = max(current_list)
     # Uncomment next line for test purposes
     # print(max(alist))
-    fnid = max(alist)
-    if fnid > 0:
-        returnres(fnid, bk)
-    else:
-        insertnotes(0, bk)
+    # fnid = max(alist)
+    # if fnid > 0:
+    #     returnres(fnid, bk)
+    # else:
+    #     insertnotes(0, bk)
+    insertnotes(footnote_dict, bk)
     return 0
 
 
-def returnres(fnid, bk):
-    # Dialog warning user for found notes
-    # and allowing to inject new start reference number for new notes
-    title = "Existing notes found!"
-    prompt = (
-        "There seems to be notes in this book already.\nNotes IDs will continue from >> "
-        + str(fnid + 1)
-        + " << or any entered below.\n\nNew notes will be inserted below existing.\n"
-    )
-    application_window = tk.Tk()
-    application_window.withdraw()
-    result = simpledialog.askinteger(title, prompt, initialvalue=fnid + 1, minvalue=1)
-    if result is not None:
-        fnid = result - 1
-        insertnotes(fnid, bk)
-    else:
-        print("ePub2-notes cancelled by your request")
-        return 0
+# def returnres(fnid, bk):
+#     # Dialog warning user for found notes
+#     # and allowing to inject new start reference number for new notes
+#     title = "Existing notes found!"
+#     prompt = (
+#         "There seems to be notes in this book already.\nNotes IDs will continue from >> "
+#         + str(fnid + 1)
+#         + " << or any entered below.\n\nNew notes will be inserted below existing.\n"
+#     )
+#     application_window = tk.Tk()
+#     application_window.withdraw()
+#     result = simpledialog.askinteger(title, prompt, initialvalue=fnid + 1, minvalue=1)
+#     if result is not None:
+#         fnid = result - 1
+#         insertnotes(fnid, bk)
+#     else:
+#         print("ePub2-notes cancelled by your request")
+#         return 0
 
 
-def insertnotes(fnid, bk):
+def insertnotes(fnid, footnote_dict: dict[any, int], bk):
     # Making and inserting the notes:
     # Iterate through all xhtml/html-files in the epub and
     # 1) Inserts link(s) to found notes in the text and link to footnote.css
@@ -81,18 +86,20 @@ def insertnotes(fnid, bk):
             #         r'<link href="../Styles/footnote.css" rel="stylesheet" type="text/css"/>\n</head>',
             #         html,
             #     )
+            current_footnote_id = footnote_dict[id]
             while found is not None:
                 # once for every found note. If necessary,
                 # replace the words "Note" and "Back" with whatever you see fit
-                fnid = fnid + 1
+                # fnid = fnid + 1
+                current_footnote_id += 1
                 html = re.sub(
                     r"\^\[(.*?)\]",
                     r'<sup><small><a class="footnoteRef" href="#fn'
-                    + str(fnid)
+                    + str(current_footnote_id)
                     + '" id="fnref'
-                    + str(fnid)
+                    + str(current_footnote_id)
                     + '">['
-                    + str(fnid)
+                    + str(current_footnote_id)
                     + "]</a></small></sup>",
                     html,
                     1,
@@ -100,18 +107,25 @@ def insertnotes(fnid, bk):
                 html = re.sub(
                     r"\<\/body\>",
                     r'\n\n<div class="footnote" id="fn'
-                    + str(fnid)
+                    + str(current_footnote_id)
                     + '"><a href="#fnref'
-                    + str(fnid)
+                    + str(current_footnote_id)
                     + '">['
-                    + str(fnid)
+                    + str(current_footnote_id)
                     + "]</a>"
                     + found.group(0).strip("[]^").replace("\\", "\\\\")
                     + "</div>\n</body>",
                     html,
                     1,
                 )
-                print(id, href, "Note " + str(fnid) + ":" + found.group(0).strip("[]^"))
+                print(
+                    id,
+                    href,
+                    "Note "
+                    + str(current_footnote_id)
+                    + ":"
+                    + found.group(0).strip("[]^"),
+                )
                 found = re.search(r"\^\[.*?\]", html)
         else:
             print(id, href, "No notes found")
