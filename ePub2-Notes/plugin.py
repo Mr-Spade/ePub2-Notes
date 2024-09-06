@@ -124,16 +124,7 @@ def insertnotes(fnid, bk, cssfound):
         # print(str(cssfound) + ' ' + str(lastid) + ' ' + str(fnid))
         # css
     if fnid > 0 and cssfound == 0:
-        cssdata = ".footnote {\n   font-size: 0.95em;\n   margin-left: 1em;\n   margin-top: 1em;\n   padding-top: 1em;\n   text-indent: 0;\n   text-align: justify;\n   page-break-before: always;\n   border-top: 1px;\n   border-bottom: 0;\n   border-left: 0;\n   border-right: 0;\n   border-style: solid;\n   border-color: black;\n   padding-top: 1em;\n   width: 75%;\n   }"
-        cssdata = cssdata + "\n.fn {\n   text-indent: 0;\n   }"
-        cssdata = (
-            cssdata
-            + "\na.footnoteRef {\n   text-decoration: none;\n   border-bottom: 1px dotted;\n   color: inherit;\n   position: relative;\n   top: -0.5em;\n   font-size: 70%;\n   }"
-        )
-        cssdata = (
-            cssdata
-            + "\n.fnrightalign {\n   text-align: right;\n   margin-right: 10%;\n   text-decoration: none;\n   color: inherit;\n   font-style: oblique;\n   }"
-        )
+        cssdata = ""
         basename = "footnote.css"
         uid = "footnotecss"
         mime = "text/css"
