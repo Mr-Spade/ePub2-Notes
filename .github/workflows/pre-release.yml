@@ -2,8 +2,8 @@ name: Publish Release
 
 on:
   push:
-    tags:
-      - "*"
+    branches:
+      - main
 
 jobs:
   release:
@@ -12,26 +12,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Get the tag name
-        id: get-tag
-        run: echo ::set-output name=tag::${GITHUB_REF#refs/tags/}
-
-      - name: Create zip file for tag release
+      - name: Create zip file for beta release
         run: |
           mkdir ePub2-Notes
           cp plugin.png plugin.py plugin.xml ePub2-Notes/
-          zip -r "ePub2-Notes_${{ steps.get-tag.outputs.tag }}.zip" ePub2-Notes
+          zip -r "ePub2-Notes_beta.zip" ePub2-Notes
 
-      - name: Create or Update Release for tag
+      - name: Create or Update Pre-release for beta
         uses: softprops/action-gh-release@v1
         with:
-          files: "ePub2-Notes_${{ steps.get-tag.outputs.tag }}.zip"
+          files: "ePub2-Notes_beta.zip"
           draft: false
-          prerelease: false
+          prerelease: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Cleanup
         run: |
           rm -rf ePub2-Notes
-          rm ePub2-Notes_${{ steps.get-tag.outputs.tag }}.zip
+          rm ePub2-Notes_beta.zip
