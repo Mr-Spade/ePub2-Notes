@@ -121,18 +121,18 @@ def insertnotes(fnid, bk, cssfound):
         # Uncomment next line for test purposes
         # print(str(cssfound) + ' ' + str(lastid) + ' ' + str(fnid))
         # css
-    if fnid > 0 and cssfound == 0:
-        cssdata = ""
-        basename = "footnote.css"
-        uid = "footnotecss"
-        mime = "text/css"
-        bk.addfile(uid, basename, cssdata, mime)
-    elif cssfound == 1:
-        print(
-            '\n\n!!!\nExisting file "footnote.css" found. If this was NOT created by a previous run of this plugin, or you have edited it, you should check the formatting of any newly inserted footnotes.'
-        )
-    else:
-        print("Finished …")
+    # if fnid > 0 and cssfound == 0:
+    #     cssdata = ""
+    #     basename = "footnote.css"
+    #     uid = "footnotecss"
+    #     mime = "text/css"
+    #     bk.addfile(uid, basename, cssdata, mime)
+    # elif cssfound == 1:
+    #     print(
+    #         '\n\n!!!\nExisting file "footnote.css" found. If this was NOT created by a previous run of this plugin, or you have edited it, you should check the formatting of any newly inserted footnotes.'
+    #     )
+    # else:
+    print("Finished …")
     return 0
 
 
