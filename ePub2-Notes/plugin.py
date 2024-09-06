@@ -87,13 +87,13 @@ def insertnotes(fnid, bk, cssfound):
                 fnid = fnid + 1
                 html = re.sub(
                     r"\^\[(.*?)\]",
-                    r'<a class="footnoteRef" href="#fn'
+                    r'<sup><small><a class="footnoteRef" href="#fn'
                     + str(fnid)
                     + '" id="fnref'
                     + str(fnid)
-                    + '">Note '
+                    + '">['
                     + str(fnid)
-                    + ")</a>",
+                    + "]</a></small></sup>",
                     html,
                     1,
                 )
@@ -101,13 +101,13 @@ def insertnotes(fnid, bk, cssfound):
                     r"\<\/body\>",
                     r'\n\n<div class="footnote" id="fn'
                     + str(fnid)
-                    + '">\n<p class="fn"><b>Note '
+                    + '"><a href="#fnref'
                     + str(fnid)
-                    + '</b></p>\n<p class="fn">'
+                    + '">['
+                    + str(fnid)
+                    + "]</a>"
                     + found.group(0).strip("[]^").replace("\\", "\\\\")
-                    + '</p>\n<p class="fnrightalign"><a href="#fnref'
-                    + str(fnid)
-                    + '">Back</a></p>\n</div>\n</body>',
+                    + "</div>\n</body>",
                     html,
                     1,
                 )
